@@ -1,0 +1,158 @@
+/* Base Styles */
+body {
+    font-family: "Inter", sans-serif;
+    color: #232323;
+}
+
+.font-space {
+    font-family: "Space Mono", monospace;
+}
+
+/* Typewriter animation */
+.typewriter {
+    display: inline-block;
+    border-right: 3px solid #232323;
+    animation: blink 0.7s step-end infinite;
+    min-height: 1.5em;
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}
+
+.fade-in {
+    animation: fadeIn 0.8s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Smooth hover transitions */
+.hover-lift {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-lift:hover {
+    transform: translateY(-2px);
+}
+
+/* Button glow effect */
+.btn-primary {
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    box-shadow: 0 10px 40px -10px rgba(35, 35, 35, 0.3);
+    transform: translateY(-1px);
+}
+
+.btn-secondary {
+    transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+    background-color: #f8f8f8;
+}
+
+/* Subtle scroll reveal */
+.scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.scroll-reveal.revealed {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Icon hover effect */
+.icon-container {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.icon-container:hover {
+    transform: scale(1.05);
+}
+
+.icon-container svg {
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.icon-container:hover svg {
+    stroke: #232323;
+}
+
+/* Timeline animation */
+@keyframes slideInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.timeline-item-animate {
+    animation: slideInUp 0.5s ease-out forwards;
+}
+
+/* Drop zone active state */
+.drop-zone-active {
+    border-color: #232323 !important;
+    background-color: #f8f8f8 !important;
+    transform: scale(1.02);
+}
+
+/* Grain effect for mockup cards */
+.mockup-card {
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.mockup-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='4' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.8'/%3E%3C/svg%3E");
+    background-size: 150px 150px;
+    opacity: 0.25;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+}
+
+.mockup-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+        600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+        rgba(255, 255, 255, 0.25),
+        transparent 40%
+    );
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+.mockup-card:hover::after {
+    opacity: 1;
+}
+
+.mockup-card:hover {
+    box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+}
