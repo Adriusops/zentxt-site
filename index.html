@@ -1,0 +1,1582 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>ZenTxt — Zen your mind.</title>
+        <meta
+            name="description"
+            content="Create files that never disappear. Simple versioning, timeline view, and secure sharing. Local-first, open source, stupidly simple."
+        />
+
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Mono:wght@700&display=swap"
+            rel="stylesheet"
+        />
+
+        <!-- Tailwind CSS -->
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            primary: "#232323",
+                            accent: "#232323",
+                        },
+                        fontFamily: {
+                            space: ['"Space Mono"', "monospace"],
+                            inter: ["Inter", "sans-serif"],
+                        },
+                    },
+                },
+            };
+        </script>
+
+        <style>
+            body {
+                font-family: "Inter", sans-serif;
+                color: #232323;
+            }
+
+            .font-space {
+                font-family: "Space Mono", monospace;
+            }
+
+            /* Typewriter animation */
+            .typewriter {
+                display: inline-block;
+                border-right: 3px solid #232323;
+                animation: blink 0.7s step-end infinite;
+                min-height: 1.5em;
+            }
+
+            @keyframes blink {
+                50% {
+                    border-color: transparent;
+                }
+            }
+
+            .fade-in {
+                animation: fadeIn 0.8s ease-in;
+            }
+
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                    transform: translateY(10px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            /* Smooth hover transitions */
+            .hover-lift {
+                transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .hover-lift:hover {
+                transform: translateY(-2px);
+            }
+
+            /* Button glow effect */
+            .btn-primary {
+                position: relative;
+                transition: all 0.3s ease;
+            }
+
+            .btn-primary:hover {
+                box-shadow: 0 10px 40px -10px rgba(35, 35, 35, 0.3);
+                transform: translateY(-1px);
+            }
+
+            .btn-secondary {
+                transition: all 0.3s ease;
+            }
+
+            .btn-secondary:hover {
+                background-color: #f8f8f8;
+            }
+
+            /* Subtle scroll reveal */
+            .scroll-reveal {
+                opacity: 0;
+                transform: translateY(30px);
+                transition: all 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .scroll-reveal.revealed {
+                opacity: 1;
+                transform: translateY(0);
+            }
+
+            /* Icon hover effect */
+            .icon-container {
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .icon-container:hover {
+                transform: scale(1.05);
+            }
+
+            .icon-container svg {
+                transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            }
+
+            .icon-container:hover svg {
+                stroke: #232323;
+            }
+
+            /* Timeline animation */
+            @keyframes slideInUp {
+                from {
+                    opacity: 0;
+                    transform: translateY(20px);
+                }
+                to {
+                    opacity: 1;
+                    transform: translateY(0);
+                }
+            }
+
+            .timeline-item-animate {
+                animation: slideInUp 0.5s ease-out forwards;
+            }
+
+            /* Drop zone active state */
+            .drop-zone-active {
+                border-color: #232323 !important;
+                background-color: #f8f8f8 !important;
+                transform: scale(1.02);
+            }
+
+            /* Grain effect for mockup cards */
+            .mockup-card {
+                position: relative;
+                overflow: hidden;
+                transition: all 0.3s ease;
+            }
+
+            .mockup-card::before {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='4' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.8'/%3E%3C/svg%3E");
+                background-size: 150px 150px;
+                opacity: 0.25;
+                pointer-events: none;
+                mix-blend-mode: overlay;
+            }
+
+            .mockup-card::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(
+                    600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+                    rgba(255, 255, 255, 0.25),
+                    transparent 40%
+                );
+                opacity: 0;
+                transition: opacity 0.4s ease;
+                pointer-events: none;
+            }
+
+            .mockup-card:hover::after {
+                opacity: 1;
+            }
+
+            .mockup-card:hover {
+                box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.1);
+            }
+        </style>
+    </head>
+    <body class="bg-white">
+        <!-- Navigation -->
+        <nav
+            class="fixed top-0 left-0 right-0 z-50 bg-white/80 backdrop-blur-md border-b border-gray-200"
+        >
+            <div class="max-w-7xl mx-auto px-6 py-4">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center gap-2">
+                        <a href="/" class="flex items-center">
+                            <img
+                                src="logo_combo.svg"
+                                alt="ZenTxt"
+                                class="h-12"
+                            />
+                        </a>
+                    </div>
+                    <div class="flex items-center gap-8">
+                        <a
+                            href="https://github.com/Adriusops/zentxt/releases/latest"
+                            class="text-gray-600 hover:text-primary transition-colors"
+                            >Download</a
+                        >
+                        <a
+                            href="https://github.com/Adriusops/zentxt"
+                            class="text-gray-600 hover:text-primary transition-colors"
+                            >GitHub</a
+                        >
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section
+            class="min-h-screen flex items-center justify-center px-6 py-20 pt-32"
+        >
+            <div class="max-w-7xl mx-auto">
+                <div class="grid lg:grid-cols-2 gap-16 items-center">
+                    <!-- Left: Text Content -->
+                    <div>
+                        <h1
+                            class="text-4xl md:text-5xl font-space font-bold text-primary mb-6 fade-in"
+                        >
+                            Zen your mind.
+                        </h1>
+
+                        <p
+                            class="text-lg md:text-xl text-gray-600 mb-8 leading-relaxed fade-in"
+                        >
+                            The simple app for files that follow you through
+                            time.
+                        </p>
+
+                        <!-- CTA Buttons -->
+                        <div
+                            class="fade-in flex flex-col sm:flex-row gap-4 mb-12"
+                        >
+                            <a
+                                href="https://github.com/Adriusops/zentxt/releases/latest"
+                                id="download-btn"
+                                class="btn-primary inline-flex items-center gap-3 bg-accent text-white px-8 py-4 rounded-lg text-lg font-medium justify-center"
+                            >
+                                <svg
+                                    class="w-5 h-5"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        stroke-linecap="round"
+                                        stroke-linejoin="round"
+                                        stroke-width="2"
+                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                    />
+                                </svg>
+                                <span id="download-text"
+                                    >Get ZenTxt for macOS</span
+                                >
+                            </a>
+
+                            <a
+                                href="https://github.com/Adriusops/zentxt/releases"
+                                class="btn-secondary inline-flex items-center gap-2 bg-white border-2 border-gray-200 text-primary px-8 py-4 rounded-lg text-lg font-medium justify-center"
+                            >
+                                More platforms
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Right: Interactive Demo -->
+                    <div class="fade-in">
+                        <div id="demoContainer" class="relative">
+                            <!-- Initial State: File + Drop Zone -->
+                            <div id="initialState" class="space-y-8">
+                                <!-- Draggable File Icon -->
+                                <div class="flex justify-center mb-8">
+                                    <div
+                                        id="draggableFile"
+                                        draggable="true"
+                                        class="cursor-move bg-white border-2 border-gray-300 rounded-xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-105 active:scale-95"
+                                    >
+                                        <div class="flex items-center gap-4">
+                                            <svg
+                                                class="w-12 h-12 text-gray-600"
+                                                fill="none"
+                                                stroke="currentColor"
+                                                viewBox="0 0 24 24"
+                                            >
+                                                <path
+                                                    stroke-linecap="round"
+                                                    stroke-linejoin="round"
+                                                    stroke-width="2"
+                                                    d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                                />
+                                            </svg>
+                                            <div>
+                                                <p class="font-space font-bold text-primary">
+                                                    contract.txt
+                                                </p>
+                                                <p class="text-sm text-gray-500">
+                                                    Drag me
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Arrow pointing down -->
+                                <div class="flex justify-center">
+                                    <svg
+                                        class="w-8 h-8 text-gray-400 animate-bounce"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M19 14l-7 7m0 0l-7-7m7 7V3"
+                                        />
+                                    </svg>
+                                </div>
+
+                                <!-- Drop Zone -->
+                                <div
+                                    id="dropZone"
+                                    class="border-3 border-dashed border-gray-300 rounded-2xl p-12 text-center bg-gray-50 transition-all duration-300"
+                                >
+                                    <svg
+                                        class="w-16 h-16 mx-auto text-gray-400 mb-4"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"
+                                        />
+                                    </svg>
+                                    <p class="text-gray-600 font-space mb-2">
+                                        Drop your file here
+                                    </p>
+                                    <p class="text-sm text-gray-400">
+                                        Start versioning automatically
+                                    </p>
+                                </div>
+                            </div>
+
+                            <!-- Timeline State (hidden initially) -->
+                            <div
+                                id="timelineState"
+                                class="hidden opacity-0 transition-opacity duration-700"
+                            >
+                                <div
+                                    class="bg-white rounded-2xl border border-gray-200 p-8 shadow-lg"
+                                >
+                                    <div class="flex items-center gap-3 mb-6">
+                                        <svg
+                                            class="w-6 h-6 text-primary"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                stroke-linecap="round"
+                                                stroke-linejoin="round"
+                                                stroke-width="2"
+                                                d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"
+                                            />
+                                        </svg>
+                                        <h3 class="font-space font-bold text-lg">
+                                            contract.txt
+                                        </h3>
+                                    </div>
+
+                                    <!-- Timeline Items -->
+                                    <div class="space-y-4">
+                                        <!-- Version 1 -->
+                                        <div
+                                            class="timeline-item flex items-start gap-4 opacity-0 translate-y-4"
+                                            style="animation-delay: 0.1s"
+                                        >
+                                            <div
+                                                class="w-3 h-3 rounded-full bg-green-500 mt-2 flex-shrink-0"
+                                            ></div>
+                                            <div class="flex-1">
+                                                <p
+                                                    class="font-space text-sm text-primary font-medium"
+                                                >
+                                                    Version 3 — Just now
+                                                </p>
+                                                <p class="text-sm text-gray-500">
+                                                    Added final pricing terms
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Version 2 -->
+                                        <div
+                                            class="timeline-item flex items-start gap-4 opacity-0 translate-y-4"
+                                            style="animation-delay: 0.3s"
+                                        >
+                                            <div
+                                                class="w-3 h-3 rounded-full bg-gray-400 mt-2 flex-shrink-0"
+                                            ></div>
+                                            <div class="flex-1">
+                                                <p
+                                                    class="font-space text-sm text-gray-700 font-medium"
+                                                >
+                                                    Version 2 — 2 hours ago
+                                                </p>
+                                                <p class="text-sm text-gray-500">
+                                                    Updated delivery dates
+                                                </p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Version 3 -->
+                                        <div
+                                            class="timeline-item flex items-start gap-4 opacity-0 translate-y-4"
+                                            style="animation-delay: 0.5s"
+                                        >
+                                            <div
+                                                class="w-3 h-3 rounded-full bg-gray-400 mt-2 flex-shrink-0"
+                                            ></div>
+                                            <div class="flex-1">
+                                                <p
+                                                    class="font-space text-sm text-gray-700 font-medium"
+                                                >
+                                                    Version 1 — Yesterday
+                                                </p>
+                                                <p class="text-sm text-gray-500">
+                                                    Initial draft
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Reset button -->
+                                    <button
+                                        id="resetDemo"
+                                        class="mt-6 text-sm text-gray-500 hover:text-primary transition-colors font-space"
+                                    >
+                                        ↻ Try again
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Your files are yours Section (like Obsidian's privacy section) -->
+        <section class="py-32 px-6 bg-gray-50">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid lg:grid-cols-2 gap-20 items-center">
+                    <!-- Left: Screenshot placeholder -->
+                    <div class="scroll-reveal order-2 lg:order-1">
+                        <div
+                            class="bg-white rounded-2xl shadow-2xl p-4 border border-gray-200"
+                        >
+                            <div
+                                class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl aspect-[4/3] flex items-center justify-center"
+                            >
+                                <div class="text-center p-8">
+                                    <svg
+                                        class="w-20 h-20 mx-auto text-gray-300 mb-4"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                                        />
+                                    </svg>
+                                    <p class="text-gray-400 font-space text-sm">
+                                        Local storage visualization
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Content -->
+                    <div class="scroll-reveal order-1 lg:order-2">
+                        <h2
+                            class="text-3xl md:text-4xl font-space font-bold text-primary mb-8"
+                        >
+                            Your files are yours.
+                        </h2>
+
+                        <div class="space-y-6 text-lg text-gray-600">
+                            <p class="leading-relaxed">
+                                ZenTxt stores files locally on your device, so
+                                you can access them quickly, even offline. No
+                                one else can read them, not even us.
+                            </p>
+                        </div>
+
+                        <div class="mt-12 space-y-6">
+                            <div>
+                                <h3 class="text-xl font-bold text-primary mb-3">
+                                    Your versions last forever.
+                                </h3>
+                                <p class="text-gray-600 leading-relaxed">
+                                    Every edit creates a new version, stored
+                                    securely. Nothing ever disappears. Your
+                                    entire history is preserved, one version at
+                                    a time.
+                                </p>
+                            </div>
+
+                            <div>
+                                <h3 class="text-xl font-bold text-primary mb-3">
+                                    Open source means open future.
+                                </h3>
+                                <p class="text-gray-600 leading-relaxed">
+                                    Built with open file formats and open source
+                                    code. You own your data for the long term.
+                                    No vendor lock-in, ever.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Never lose a version Section (like Obsidian's "Spark ideas") -->
+        <section class="py-32 px-6 bg-white">
+            <div class="max-w-6xl mx-auto">
+                <div class="text-center mb-20 scroll-reveal">
+                    <h2
+                        class="text-3xl md:text-4xl font-space font-bold text-primary mb-6"
+                    >
+                        Never lose a version.
+                    </h2>
+                    <p class="text-lg text-gray-600 max-w-3xl mx-auto">
+                        From quick notes to long documents, ZenTxt gives you the
+                        tools to track every change and organize your work.
+                    </p>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-12">
+                    <!-- Timeline Feature -->
+                    <div class="scroll-reveal">
+                        <div class="mockup-card bg-gray-50 rounded-2xl p-8 flex flex-col h-full">
+                            <h3
+                                class="text-2xl font-space font-bold text-primary mb-4"
+                            >
+                                Timeline
+                            </h3>
+                            <p class="text-gray-600 mb-6 leading-relaxed">
+                                See the complete history of your document. Each
+                                version is automatically saved with a timestamp.
+                                Travel back to any moment in time.
+                            </p>
+
+                            <!-- Timeline realistic mockup -->
+                            <div
+                                class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm flex-1"
+                            >
+                                <div class="space-y-4">
+                                    <!-- Version 4 - Latest -->
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="w-2.5 h-2.5 rounded-full bg-green-500 mt-2 flex-shrink-0"
+                                        ></div>
+                                        <div class="flex-1">
+                                            <div class="flex items-center gap-2 mb-1">
+                                                <span
+                                                    class="font-space text-sm font-medium text-primary"
+                                                    >Version 4</span
+                                                >
+                                                <span
+                                                    class="px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded font-medium"
+                                                    >Latest</span
+                                                >
+                                            </div>
+                                            <p class="text-sm text-gray-900 mb-1">
+                                                ctf
+                                            </p>
+                                            <p class="text-xs text-gray-500">
+                                                02/03/2026, 11:29
+                                            </p>
+                                            <div class="flex gap-2 mt-3">
+                                                <span
+                                                    class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded"
+                                                >
+                                                    View
+                                                </span>
+                                                <span
+                                                    class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded"
+                                                >
+                                                    Download
+                                                </span>
+                                                <span
+                                                    class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded"
+                                                >
+                                                    Compare
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Version 3 -->
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="w-2.5 h-2.5 rounded-full bg-gray-300 mt-2 flex-shrink-0"
+                                        ></div>
+                                        <div class="flex-1">
+                                            <span
+                                                class="font-space text-sm font-medium text-gray-700"
+                                                >Version 3</span
+                                            >
+                                            <p class="text-sm text-gray-900 mb-1">
+                                                txt format
+                                            </p>
+                                            <p class="text-xs text-gray-500">
+                                                02/03/2026, 11:17
+                                            </p>
+                                            <div class="flex gap-2 mt-3">
+                                                <span
+                                                    class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded"
+                                                >
+                                                    View
+                                                </span>
+                                                <span
+                                                    class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded"
+                                                >
+                                                    Download
+                                                </span>
+                                                <span
+                                                    class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded"
+                                                >
+                                                    Compare
+                                                </span>
+                                                <span
+                                                    class="px-3 py-1 bg-gray-100 text-gray-700 text-xs rounded"
+                                                >
+                                                    Restore
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Version 2 -->
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="w-2.5 h-2.5 rounded-full bg-gray-300 mt-2 flex-shrink-0"
+                                        ></div>
+                                        <div class="flex-1">
+                                            <span
+                                                class="font-space text-sm font-medium text-gray-700"
+                                                >Version 2</span
+                                            >
+                                            <p class="text-sm text-gray-900 mb-1">
+                                                Remodling
+                                            </p>
+                                            <p class="text-xs text-gray-500">
+                                                02/03/2026, 11:01
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Diff Feature -->
+                    <div class="scroll-reveal" style="transition-delay: 0.1s">
+                        <div class="mockup-card bg-gray-50 rounded-2xl p-8 flex flex-col h-full">
+                            <h3
+                                class="text-2xl font-space font-bold text-primary mb-4"
+                            >
+                                Diff View
+                            </h3>
+                            <p class="text-gray-600 mb-6 leading-relaxed">
+                                Compare any two versions side by side. See
+                                exactly what changed, word by word. Understand
+                                your editing journey.
+                            </p>
+
+                            <!-- Diff realistic mockup -->
+                            <div
+                                class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm flex-1"
+                            >
+                                <!-- Header -->
+                                <div class="mb-4 pb-4 border-b border-gray-200">
+                                    <div
+                                        class="flex items-center justify-between mb-3"
+                                    >
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm text-gray-600"
+                                                >Before</span
+                                            >
+                                            <span
+                                                class="font-space text-sm font-medium"
+                                                >txt format</span
+                                            >
+                                        </div>
+                                        <div class="flex items-center gap-2">
+                                            <span class="text-sm text-gray-600"
+                                                >After</span
+                                            >
+                                            <span
+                                                class="font-space text-sm font-medium"
+                                                >ctf</span
+                                            >
+                                        </div>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <span
+                                            class="px-3 py-1 bg-white border border-gray-300 text-gray-700 text-xs rounded"
+                                        >
+                                            Unified
+                                        </span>
+                                        <span
+                                            class="px-3 py-1 bg-black text-white text-xs rounded"
+                                        >
+                                            Side by side
+                                        </span>
+                                    </div>
+                                </div>
+
+                                <!-- Diff content -->
+                                <div class="space-y-2 font-mono text-xs">
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <!-- Before -->
+                                        <div class="bg-red-50 px-3 py-2 rounded">
+                                            <span class="text-red-700"
+                                                >- Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span
+                                            >
+                                        </div>
+                                        <!-- After -->
+                                        <div
+                                            class="bg-green-50 px-3 py-2 rounded"
+                                        >
+                                            <span class="text-green-700"
+                                                >+ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</span
+                                            >
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <!-- Unchanged line -->
+                                        <div class="bg-gray-50 px-3 py-2 rounded">
+                                            <span class="text-gray-700"
+                                                >Ut enim ad minim veniam, quis nostrud exercitation.</span
+                                            >
+                                        </div>
+                                        <div class="bg-gray-50 px-3 py-2 rounded">
+                                            <span class="text-gray-700"
+                                                >Ut enim ad minim veniam, quis nostrud exercitation.</span
+                                            >
+                                        </div>
+                                    </div>
+
+                                    <div class="grid grid-cols-2 gap-2">
+                                        <!-- Before -->
+                                        <div class="bg-red-50 px-3 py-2 rounded">
+                                            <span class="text-red-700"
+                                                >- Duis aute irure dolor in reprehenderit.</span
+                                            >
+                                        </div>
+                                        <!-- After -->
+                                        <div
+                                            class="bg-green-50 px-3 py-2 rounded"
+                                        >
+                                            <span class="text-green-700"
+                                                >+ Duis aute irure dolor in reprehenderit voluptate velit esse cillum.</span
+                                            >
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Restore Feature -->
+                    <div class="scroll-reveal" style="transition-delay: 0.2s">
+                        <div class="mockup-card bg-gray-50 rounded-2xl p-8 flex flex-col h-full">
+                            <h3
+                                class="text-2xl font-space font-bold text-primary mb-4"
+                            >
+                                One-Click Restore
+                            </h3>
+                            <p class="text-gray-600 mb-6 leading-relaxed">
+                                Found the perfect version? Restore it instantly.
+                                No complex commands, no scary warnings. Just
+                                click and you're back.
+                            </p>
+
+                            <!-- Restore realistic mockup -->
+                            <div
+                                class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm flex-1"
+                            >
+                                <div class="space-y-4">
+                                    <!-- Version item 1 -->
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="w-2.5 h-2.5 rounded-full bg-gray-300 mt-2 flex-shrink-0"
+                                        ></div>
+                                        <div class="flex-1">
+                                            <div
+                                                class="flex items-center justify-between"
+                                            >
+                                                <div>
+                                                    <span
+                                                        class="font-space text-sm font-medium text-gray-700"
+                                                        >Version 3</span
+                                                    >
+                                                    <p
+                                                        class="text-sm text-gray-900 mb-1"
+                                                    >
+                                                        txt format
+                                                    </p>
+                                                    <p
+                                                        class="text-xs text-gray-500"
+                                                    >
+                                                        2 hours ago
+                                                    </p>
+                                                </div>
+                                                <span
+                                                    class="px-4 py-1.5 bg-black text-white rounded text-sm"
+                                                >
+                                                    Restore
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Version item 2 -->
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="w-2.5 h-2.5 rounded-full bg-gray-300 mt-2 flex-shrink-0"
+                                        ></div>
+                                        <div class="flex-1">
+                                            <div
+                                                class="flex items-center justify-between"
+                                            >
+                                                <div>
+                                                    <span
+                                                        class="font-space text-sm font-medium text-gray-700"
+                                                        >Version 2</span
+                                                    >
+                                                    <p
+                                                        class="text-sm text-gray-900 mb-1"
+                                                    >
+                                                        Remodling
+                                                    </p>
+                                                    <p
+                                                        class="text-xs text-gray-500"
+                                                    >
+                                                        Yesterday
+                                                    </p>
+                                                </div>
+                                                <span
+                                                    class="px-4 py-1.5 bg-gray-100 text-gray-700 rounded text-sm"
+                                                >
+                                                    Restore
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Version item 3 -->
+                                    <div class="flex items-start gap-3">
+                                        <div
+                                            class="w-2.5 h-2.5 rounded-full bg-gray-300 mt-2 flex-shrink-0"
+                                        ></div>
+                                        <div class="flex-1">
+                                            <div
+                                                class="flex items-center justify-between"
+                                            >
+                                                <div>
+                                                    <span
+                                                        class="font-space text-sm font-medium text-gray-700"
+                                                        >Version 1</span
+                                                    >
+                                                    <p
+                                                        class="text-sm text-gray-900 mb-1"
+                                                    >
+                                                        Initial draft
+                                                    </p>
+                                                    <p
+                                                        class="text-xs text-gray-500"
+                                                    >
+                                                        Last week
+                                                    </p>
+                                                </div>
+                                                <span
+                                                    class="px-4 py-1.5 bg-gray-100 text-gray-700 rounded text-sm"
+                                                >
+                                                    Restore
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Info message -->
+                                    <div
+                                        class="mt-4 p-3 bg-gray-50 rounded border border-gray-200"
+                                    >
+                                        <p class="text-xs text-gray-600">
+                                            💡 Restoring will create a new version
+                                            with the old content
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Simplicity Feature -->
+                    <div class="scroll-reveal" style="transition-delay: 0.3s">
+                        <div class="mockup-card bg-gray-50 rounded-2xl p-8 flex flex-col h-full">
+                            <h3
+                                class="text-2xl font-space font-bold text-primary mb-4"
+                            >
+                                Stupidly Simple
+                            </h3>
+                            <p class="text-gray-600 mb-6 leading-relaxed">
+                                No commands to memorize. No Git knowledge
+                                required. No configuration files. Just write,
+                                and ZenTxt handles the rest automatically.
+                            </p>
+
+                            <!-- Save new version mockup -->
+                            <div
+                                class="bg-white rounded-xl p-6 border border-gray-200 shadow-sm flex-1"
+                            >
+                                <div class="space-y-4">
+                                    <h4 class="font-space font-medium text-base">
+                                        Save a new version
+                                    </h4>
+
+                                    <!-- Upload file -->
+                                    <div>
+                                        <label
+                                            class="block text-sm text-gray-700 mb-2"
+                                            >Upload file</label
+                                        >
+                                        <div
+                                            class="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center bg-gray-50"
+                                        >
+                                            <span
+                                                class="px-4 py-2 bg-black text-white rounded text-sm mr-2 inline-block"
+                                            >
+                                                Choisir un fichier
+                                            </span>
+                                            <span class="text-sm text-gray-500"
+                                                >Aucun fichier choisi</span
+                                            >
+                                            <p
+                                                class="text-xs text-gray-400 mt-2"
+                                            >
+                                                Supports .txt and .md files
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Message -->
+                                    <div>
+                                        <label
+                                            class="block text-sm text-gray-700 mb-2"
+                                            >Message</label
+                                        >
+                                        <input
+                                            type="text"
+                                            placeholder="What changed?"
+                                            class="w-full px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-black"
+                                        />
+                                    </div>
+
+                                    <!-- Actions -->
+                                    <div class="flex gap-2 pt-2">
+                                        <span
+                                            class="px-4 py-2 bg-black text-white rounded text-sm"
+                                        >
+                                            Save
+                                        </span>
+                                        <span
+                                            class="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded text-sm"
+                                        >
+                                            Cancel
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Share Securely Section (like Obsidian's "Sync securely") -->
+        <section class="py-32 px-6 bg-gray-50">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid lg:grid-cols-2 gap-20 items-center">
+                    <!-- Left: Content -->
+                    <div class="scroll-reveal">
+                        <h2
+                            class="text-3xl md:text-4xl font-space font-bold text-primary mb-8"
+                        >
+                            Share instantly.
+                        </h2>
+
+                        <p class="text-lg text-gray-600 mb-12 leading-relaxed">
+                            Download your documents anytime. Share files with
+                            your team without compromising your local workflow.
+                        </p>
+
+                        <div class="space-y-8">
+                            <div class="flex gap-4">
+                                <div class="flex-shrink-0">
+                                    <svg
+                                        class="w-6 h-6 text-accent"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                        />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3
+                                        class="text-xl font-bold text-primary mb-2"
+                                    >
+                                        Export anywhere.
+                                    </h3>
+                                    <p class="text-gray-600 leading-relaxed">
+                                        Download any version as a plain text
+                                        file. Your work is never locked in.
+                                        Export and use anywhere, anytime.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <div class="flex-shrink-0">
+                                    <svg
+                                        class="w-6 h-6 text-accent"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                                        />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3
+                                        class="text-xl font-bold text-primary mb-2"
+                                    >
+                                        Share effortlessly.
+                                    </h3>
+                                    <p class="text-gray-600 leading-relaxed">
+                                        Send documents to collaborators with
+                                        complete version history. They get the
+                                        full timeline, not just the final draft.
+                                    </p>
+                                </div>
+                            </div>
+
+                            <div class="flex gap-4">
+                                <div class="flex-shrink-0">
+                                    <svg
+                                        class="w-6 h-6 text-accent"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                                        />
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                                        />
+                                    </svg>
+                                </div>
+                                <div>
+                                    <h3
+                                        class="text-xl font-bold text-primary mb-2"
+                                    >
+                                        Full control.
+                                    </h3>
+                                    <p class="text-gray-600 leading-relaxed">
+                                        Choose which files and versions to
+                                        share. Your data stays private by
+                                        default. Share only what you want, when
+                                        you want.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Screenshot placeholder -->
+                    <div class="scroll-reveal">
+                        <div
+                            class="bg-white rounded-2xl shadow-2xl p-4 border border-gray-200"
+                        >
+                            <div
+                                class="bg-gradient-to-br from-gray-50 to-gray-100 rounded-xl aspect-[4/3] flex items-center justify-center"
+                            >
+                                <div class="text-center p-8">
+                                    <svg
+                                        class="w-20 h-20 mx-auto text-gray-300 mb-4"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z"
+                                        />
+                                    </svg>
+                                    <p class="text-gray-400 font-space text-sm">
+                                        Share & export interface
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Final CTA Section (like Obsidian's "It's your time to shine") -->
+        <section class="py-32 px-6 bg-white">
+            <div class="max-w-4xl mx-auto text-center scroll-reveal">
+                <h2
+                    class="text-4xl md:text-5xl font-space font-bold text-primary mb-8"
+                >
+                    It's your time to zen.
+                </h2>
+
+                <div class="mb-16">
+                    <a
+                        href="https://github.com/Adriusops/zentxt/releases/latest"
+                        class="btn-primary inline-flex items-center gap-3 bg-accent text-white px-10 py-5 rounded-lg text-xl font-medium"
+                    >
+                        <span>Get ZenTxt</span>
+                    </a>
+                </div>
+
+                <!-- Community Cards (like Obsidian footer) -->
+                <div class="grid md:grid-cols-3 gap-8 mt-20">
+                    <div
+                        class="bg-gray-50 rounded-2xl p-8 text-left hover-lift"
+                    >
+                        <h3
+                            class="text-xl font-space font-bold text-primary mb-4"
+                        >
+                            Join us on GitHub
+                        </h3>
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            Star the project, report issues, and contribute to
+                            making ZenTxt better for everyone.
+                        </p>
+                        <a
+                            href="https://github.com/Adriusops/zentxt"
+                            class="text-accent hover:underline font-medium inline-flex items-center gap-2"
+                        >
+                            Visit repository
+                            <svg
+                                class="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 5l7 7-7 7"
+                                />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <div
+                        class="bg-gray-50 rounded-2xl p-8 text-left hover-lift"
+                    >
+                        <h3
+                            class="text-xl font-space font-bold text-primary mb-4"
+                        >
+                            Discussion forum
+                        </h3>
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            Share feedback, request features, and discuss
+                            version control philosophy with the community.
+                        </p>
+                        <a
+                            href="https://github.com/Adriusops/zentxt/discussions"
+                            class="text-accent hover:underline font-medium inline-flex items-center gap-2"
+                        >
+                            Join discussions
+                            <svg
+                                class="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 5l7 7-7 7"
+                                />
+                            </svg>
+                        </a>
+                    </div>
+
+                    <div
+                        class="bg-gray-50 rounded-2xl p-8 text-left hover-lift"
+                    >
+                        <h3
+                            class="text-xl font-space font-bold text-primary mb-4"
+                        >
+                            Open source
+                        </h3>
+                        <p class="text-gray-600 mb-6 leading-relaxed">
+                            Built in the open with Go and love. Check out the
+                            code, contribute, or fork for your own needs.
+                        </p>
+                        <a
+                            href="https://github.com/Adriusops/zentxt/blob/main/LICENSE"
+                            class="text-accent hover:underline font-medium inline-flex items-center gap-2"
+                        >
+                            View license
+                            <svg
+                                class="w-4 h-4"
+                                fill="none"
+                                stroke="currentColor"
+                                viewBox="0 0 24 24"
+                            >
+                                <path
+                                    stroke-linecap="round"
+                                    stroke-linejoin="round"
+                                    stroke-width="2"
+                                    d="M9 5l7 7-7 7"
+                                />
+                            </svg>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer (like Obsidian's footer) -->
+        <footer class="py-16 px-6 border-t border-gray-200 bg-gray-50">
+            <div class="max-w-7xl mx-auto">
+                <div class="grid md:grid-cols-4 gap-12 mb-12">
+                    <!-- Brand Column -->
+                    <div>
+                        <div class="flex items-center gap-2 mb-4">
+                            <a href="/" class="flex items-center">
+                                <img
+                                    src="logo_combo.svg"
+                                    alt="ZenTxt"
+                                    class="h-12"
+                                />
+                            </a>
+                        </div>
+                        <p class="text-gray-600 text-sm leading-relaxed mb-6">
+                            Simple versioning for your text files. Local-first,
+                            open source.
+                        </p>
+                        <div class="flex gap-4">
+                            <a
+                                href="https://github.com/Adriusops/zentxt"
+                                class="text-gray-400 hover:text-primary transition-colors"
+                                aria-label="GitHub"
+                            >
+                                <svg
+                                    class="w-5 h-5"
+                                    fill="currentColor"
+                                    viewBox="0 0 24 24"
+                                >
+                                    <path
+                                        d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"
+                                    />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Get Started Column -->
+                    <div>
+                        <h3 class="font-space font-bold text-primary mb-4">
+                            Get started
+                        </h3>
+                        <ul class="space-y-3">
+                            <li>
+                                <a
+                                    href="https://github.com/Adriusops/zentxt/releases/latest"
+                                    class="text-gray-600 hover:text-primary transition-colors"
+                                >
+                                    Download
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/Adriusops/zentxt#readme"
+                                    class="text-gray-600 hover:text-primary transition-colors"
+                                >
+                                    Documentation
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/Adriusops/zentxt/releases"
+                                    class="text-gray-600 hover:text-primary transition-colors"
+                                >
+                                    Releases
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Community Column -->
+                    <div>
+                        <h3 class="font-space font-bold text-primary mb-4">
+                            Community
+                        </h3>
+                        <ul class="space-y-3">
+                            <li>
+                                <a
+                                    href="https://github.com/Adriusops/zentxt"
+                                    class="text-gray-600 hover:text-primary transition-colors"
+                                >
+                                    GitHub
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/Adriusops/zentxt/discussions"
+                                    class="text-gray-600 hover:text-primary transition-colors"
+                                >
+                                    Discussions
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/Adriusops/zentxt/issues"
+                                    class="text-gray-600 hover:text-primary transition-colors"
+                                >
+                                    Issues
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- About Column -->
+                    <div>
+                        <h3 class="font-space font-bold text-primary mb-4">
+                            About
+                        </h3>
+                        <ul class="space-y-3">
+                            <li>
+                                <a
+                                    href="https://github.com/Adriusops"
+                                    class="text-gray-600 hover:text-primary transition-colors"
+                                >
+                                    Creator
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/Adriusops/zentxt/blob/main/LICENSE"
+                                    class="text-gray-600 hover:text-primary transition-colors"
+                                >
+                                    License
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    href="https://github.com/Adriusops/zentxt/blob/main/CONTRIBUTING.md"
+                                    class="text-gray-600 hover:text-primary transition-colors"
+                                >
+                                    Contributing
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="pt-8 border-t border-gray-200 text-center">
+                    <p class="text-gray-500 text-sm">
+                        Built with care by
+                        <a
+                            href="https://github.com/Adriusops"
+                            class="text-accent hover:underline"
+                            >Adrien</a
+                        >
+                        — Open source & local-first
+                    </p>
+                </div>
+            </div>
+        </footer>
+
+        <script>
+            // Grain and light effect on mockup cards
+            document.addEventListener("DOMContentLoaded", function () {
+                const cards = document.querySelectorAll(".mockup-card");
+
+                cards.forEach((card) => {
+                    card.addEventListener("mousemove", function (e) {
+                        const rect = card.getBoundingClientRect();
+                        const x = ((e.clientX - rect.left) / rect.width) * 100;
+                        const y = ((e.clientY - rect.top) / rect.height) * 100;
+
+                        card.style.setProperty("--mouse-x", `${x}%`);
+                        card.style.setProperty("--mouse-y", `${y}%`);
+                    });
+                });
+            });
+
+            // Interactive Demo: Drag & Drop
+            (function () {
+                const draggableFile = document.getElementById("draggableFile");
+                const dropZone = document.getElementById("dropZone");
+                const initialState = document.getElementById("initialState");
+                const timelineState = document.getElementById("timelineState");
+                const resetBtn = document.getElementById("resetDemo");
+
+                // Drag events
+                draggableFile.addEventListener("dragstart", (e) => {
+                    e.dataTransfer.effectAllowed = "move";
+                    draggableFile.style.opacity = "0.5";
+                });
+
+                draggableFile.addEventListener("dragend", (e) => {
+                    draggableFile.style.opacity = "1";
+                });
+
+                // Drop zone events
+                dropZone.addEventListener("dragover", (e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = "move";
+                    dropZone.classList.add("drop-zone-active");
+                });
+
+                dropZone.addEventListener("dragleave", (e) => {
+                    dropZone.classList.remove("drop-zone-active");
+                });
+
+                dropZone.addEventListener("drop", (e) => {
+                    e.preventDefault();
+                    dropZone.classList.remove("drop-zone-active");
+
+                    // Transition to timeline
+                    initialState.style.opacity = "0";
+                    initialState.style.transform = "scale(0.95)";
+
+                    setTimeout(() => {
+                        initialState.classList.add("hidden");
+                        timelineState.classList.remove("hidden");
+
+                        // Fade in timeline
+                        setTimeout(() => {
+                            timelineState.style.opacity = "1";
+
+                            // Animate timeline items
+                            const items =
+                                timelineState.querySelectorAll(".timeline-item");
+                            items.forEach((item, index) => {
+                                setTimeout(() => {
+                                    item.classList.add("timeline-item-animate");
+                                }, index * 150);
+                            });
+                        }, 50);
+                    }, 300);
+                });
+
+                // Reset demo
+                resetBtn.addEventListener("click", () => {
+                    // Hide timeline
+                    timelineState.style.opacity = "0";
+
+                    setTimeout(() => {
+                        timelineState.classList.add("hidden");
+
+                        // Reset timeline items
+                        const items =
+                            timelineState.querySelectorAll(".timeline-item");
+                        items.forEach((item) => {
+                            item.classList.remove("timeline-item-animate");
+                        });
+
+                        // Show initial state
+                        initialState.classList.remove("hidden");
+                        initialState.style.opacity = "1";
+                        initialState.style.transform = "scale(1)";
+                    }, 300);
+                });
+            })();
+
+            // OS Detection for download button
+            function detectOS() {
+                const userAgent = window.navigator.userAgent.toLowerCase();
+                const downloadText = document.getElementById("download-text");
+
+                if (downloadText) {
+                    if (userAgent.indexOf("win") > -1) {
+                        downloadText.textContent = "Get ZenTxt for Windows";
+                    } else if (userAgent.indexOf("linux") > -1) {
+                        downloadText.textContent = "Get ZenTxt for Linux";
+                    } else if (userAgent.indexOf("mac") > -1) {
+                        downloadText.textContent = "Get ZenTxt for macOS";
+                    } else {
+                        downloadText.textContent = "Get ZenTxt";
+                    }
+                }
+            }
+
+            detectOS();
+
+            // Scroll reveal animation
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: "0px 0px -50px 0px",
+            };
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add("revealed");
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll(".scroll-reveal").forEach((el) => {
+                observer.observe(el);
+            });
+        </script>
+    </body>
+</html>
