@@ -101,38 +101,48 @@
                         </p>
 
                         <!-- CTA Buttons -->
-                        <div
-                            class="fade-in flex flex-col sm:flex-row gap-4 mb-12"
-                        >
-                            <a
-                                href="https://github.com/Adriusops/zentxt/releases/latest"
-                                id="download-btn"
-                                class="btn-primary inline-flex items-center gap-3 bg-accent text-white px-8 py-4 rounded-lg text-lg font-medium justify-center"
+                        <div class="fade-in">
+                            <div
+                                class="flex flex-col sm:flex-row gap-4 mb-4"
                             >
-                                <svg
-                                    class="w-5 h-5"
-                                    fill="none"
-                                    stroke="currentColor"
-                                    viewBox="0 0 24 24"
+                                <a
+                                    href="https://github.com/Adriusops/zentxt/releases/latest"
+                                    id="download-btn"
+                                    class="btn-primary inline-flex items-center gap-3 bg-accent text-white px-8 py-4 rounded-lg text-lg font-medium justify-center"
                                 >
-                                    <path
-                                        stroke-linecap="round"
-                                        stroke-linejoin="round"
-                                        stroke-width="2"
-                                        d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
-                                    />
-                                </svg>
-                                <span id="download-text"
-                                    >Get ZenTxt for macOS</span
-                                >
-                            </a>
+                                    <svg
+                                        class="w-5 h-5"
+                                        fill="none"
+                                        stroke="currentColor"
+                                        viewBox="0 0 24 24"
+                                    >
+                                        <path
+                                            stroke-linecap="round"
+                                            stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"
+                                        />
+                                    </svg>
+                                    <span id="download-text"
+                                        >Get ZenTxt for macOS</span
+                                    >
+                                </a>
 
-                            <a
-                                href="https://github.com/Adriusops/zentxt/releases"
-                                class="btn-secondary inline-flex items-center gap-2 bg-white border-2 border-gray-200 text-primary px-8 py-4 rounded-lg text-lg font-medium justify-center"
-                            >
-                                More platforms
-                            </a>
+                                <a
+                                    href="https://github.com/Adriusops/zentxt/releases"
+                                    class="btn-secondary inline-flex items-center gap-2 bg-white border-2 border-gray-200 text-primary px-8 py-4 rounded-lg text-lg font-medium justify-center"
+                                >
+                                    More platforms
+                                </a>
+                            </div>
+
+                            <!-- macOS Security Warning -->
+                            <div id="macos-warning" class="hidden mt-4 p-4 bg-amber-50 border border-amber-200 rounded-lg">
+                                <p class="text-sm text-amber-800">
+                                    <span class="font-medium">⚠️ macOS users:</span> If macOS blocks the app, open Terminal and run:
+                                    <code class="bg-amber-100 px-2 py-1 rounded text-xs font-mono">xattr -cr /path/to/zentxt.app</code>
+                                </p>
+                            </div>
                         </div>
                     </div>
 

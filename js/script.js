@@ -96,17 +96,31 @@ document.addEventListener("DOMContentLoaded", function () {
 function detectOS() {
     const userAgent = window.navigator.userAgent.toLowerCase();
     const downloadText = document.getElementById("download-text");
+    const downloadBtn = document.getElementById("download-btn");
+    const macosWarning = document.getElementById("macos-warning");
 
-    if (downloadText) {
+    if (downloadText && downloadBtn) {
         if (userAgent.indexOf("win") > -1) {
             downloadText.textContent = "Get ZenTxt for Windows";
+            downloadBtn.href = "https://github.com/Adriusops/zentxt/releases/latest/download/zentxt-windows.exe";
         } else if (userAgent.indexOf("linux") > -1) {
             downloadText.textContent = "Get ZenTxt for Linux";
+            downloadBtn.href = "https://github.com/Adriusops/zentxt/releases/latest/download/zentxt-linux";
         } else if (userAgent.indexOf("mac") > -1) {
             downloadText.textContent = "Get ZenTxt for macOS";
+            downloadBtn.href = "https://github.com/Adriusops/zentxt/releases/latest/download/zentxt-mac.zip";
+
+            // Show macOS warning
+            if (macosWarning) {
+                macosWarning.classList.remove("hidden");
+            }
         } else {
             downloadText.textContent = "Get ZenTxt";
+            downloadBtn.href = "https://github.com/Adriusops/zentxt/releases/latest";
         }
+
+        // Add download attribute for direct download
+        downloadBtn.setAttribute("download", "");
     }
 }
 
